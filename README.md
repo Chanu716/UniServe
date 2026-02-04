@@ -266,25 +266,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 👨‍💻 Team
 
-- **Project Manager**: [Name]
-- **Lead Developer**: [Name]
-- **Backend Developer**: [Name]
-- **Frontend Developer**: [Name]
-- **QA Engineer**: [Name]
-- **Database Administrator**: [Name]
-
-## 📞 Support
-
-For support, email support@uniserve.edu or raise an issue in the GitHub repository.
-
-## 🙏 Acknowledgments
-
-- Institution Management for project sponsorship
-- Faculty advisors for guidance
-- Beta testers for valuable feedback
-
----
-
-**Version**: 1.0.0  
-**Last Updated**: February 4, 2026  
-**Status**: Planning Phase
+- K Chanikya
+- B Hemanth
+-  B Vignesh
+-  Vivek
+  
