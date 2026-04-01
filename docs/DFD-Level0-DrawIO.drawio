@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="Electron" modified="2026-03-16T14:00:00.000Z" agent="5.0" version="14.0.0" type="device">
+  <diagram id="dfd-level0" name="DFD Level 0 - Context Diagram">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="20" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1200" background="#f5f5f5" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ========== TITLE ========== -->
+        <mxCell id="title" value="UniServe - Campus Resource Booking System&#10;DFD Level 0: Context Diagram" style="text;html=1;strokeColor=none;fillColor=none;fontSize=22;fontStyle=1;align=center;verticalAlign=middle;fontColor=#0d1b3a;" vertex="1" parent="1">
+          <mxGeometry x="100" y="20" width="1600" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ========== CENTER: MAIN SYSTEM ========== -->
+        <mxCell id="system" value="UNISERVER SYSTEM&#10;Campus Resource Booking Platform" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2196f3;strokeColor=#1565c0;strokeWidth=4;fontSize=14;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="650" y="450" width="300" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- ========== EXTERNAL ENTITIES ========== -->
+
+        <!-- Student (top-left) -->
+        <mxCell id="student" value="STUDENT" style="rect;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f57f17;strokeWidth=3;fontSize=13;fontStyle=1;fontColor=#000;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="140" y="200" width="150" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Faculty (top-center) -->
+        <mxCell id="faculty" value="FACULTY" style="rect;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f57f17;strokeWidth=3;fontSize=13;fontStyle=1;fontColor=#000;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="130" width="150" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Coordinator (top-right) -->
+        <mxCell id="coordinator" value="DEPT COORDINATOR" style="rect;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f57f17;strokeWidth=3;fontSize=13;fontStyle=1;fontColor=#000;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="130" width="155" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Admin (right) -->
+        <mxCell id="admin" value="ADMINISTRATOR" style="rect;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f57f17;strokeWidth=3;fontSize=13;fontStyle=1;fontColor=#000;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="480" width="150" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Management (bottom-right) -->
+        <mxCell id="management" value="MANAGEMENT" style="rect;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f57f17;strokeWidth=3;fontSize=13;fontStyle=1;fontColor=#000;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="790" width="155" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Email Service (bottom-center) -->
+        <mxCell id="emailService" value="EMAIL SERVICE&#10;(External SMTP)" style="rect;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#ff6f00;strokeWidth=3;fontSize=13;fontStyle=1;fontColor=#000;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="790" width="160" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ========== DATA FLOWS ========== -->
+
+        <!-- Student → System -->
+        <mxCell id="e_s_sys" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1565c0;endArrow=block;endFill=1;endSize=8;" edge="1" parent="1" source="student" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_s_sys" value="Login, Booking Request,&#10;Cancellation, QR Check-in" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#1565c0;fontStyle=1;" vertex="1" connectable="0" parent="e_s_sys">
+          <mxGeometry relative="0.3" offset="-80" as="geometry" />
+        </mxCell>
+
+        <!-- System → Student -->
+        <mxCell id="e_sys_s" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1b5e20;endArrow=block;endFill=1;endSize=8;" edge="1" parent="1" source="system" target="student">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="660" y="530" />
+              <mxPoint x="215" y="530" />
+              <mxPoint x="215" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_sys_s" value="Booking Confirmation,&#10;Status Updates, Receipts" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#1b5e20;fontStyle=1;" vertex="1" connectable="0" parent="e_sys_s">
+          <mxGeometry relative="0.6" offset="-100" as="geometry" />
+        </mxCell>
+
+        <!-- Faculty → System -->
+        <mxCell id="e_f_sys" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1565c0;endArrow=block;endFill=1;endSize=8;" edge="1" parent="1" source="faculty" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_f_sys" value="Login, Approve/Reject,&#10;Book Resources" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#1565c0;fontStyle=1;" vertex="1" connectable="0" parent="e_f_sys">
+          <mxGeometry relative="0.4" offset="-20" as="geometry" />
+        </mxCell>
+
+        <!-- System → Faculty -->
+        <mxCell id="e_sys_f" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1b5e20;endArrow=block;endFill=1;endSize=8;" edge="1" parent="1" source="system" target="faculty">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="450" />
+              <mxPoint x="680" y="165" />
+              <mxPoint x="590" y="165" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_sys_f" value="Approval Requests,&#10;Notifications" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#1b5e20;fontStyle=1;" vertex="1" connectable="0" parent="e_sys_f">
+          <mxGeometry relative="0.5" offset="-80" as="geometry" />
+        </mxCell>
+
+        <!-- Coordinator → System -->
+        <mxCell id="e_c_sys" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1565c0;endArrow=block;endFill=1;endSize=8;" edge="1" parent="1" source="coordinator" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_c_sys" value="Add/Edit Resources,&#10;Approve Bookings" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#1565c0;fontStyle=1;" vertex="1" connectable="0" parent="e_c_sys">
+          <mxGeometry relative="0.5" offset="-20" as="geometry" />
+        </mxCell>
+
+        <!-- System → Coordinator -->
+        <mxCell id="e_sys_c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1b5e20;endArrow=block;endFill=1;endSize=8;" edge="1" parent="1" source="system" target="coordinator">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="920" y="450" />
+              <mxPoint x="920" y="165" />
+              <mxPoint x="1010" y="165" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_sys_c" value="Pending Requests,&#10;Usage Reports" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#1b5e20;fontStyle=1;" vertex="1" connectable="0" parent="e_sys_c">
+          <mxGeometry relative="0.5" offset="20" as="geometry" />
+        </mxCell>
+
+        <!-- Admin → System -->
+        <mxCell id="e_a_sys" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1565c0;endArrow=block;endFill=1;endSize=8;" edge="1" parent="1" source="admin" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_a_sys" value="System Config,&#10;User Management" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#1565c0;fontStyle=1;" vertex="1" connectable="0" parent="e_a_sys">
+          <mxGeometry relative="0.5" offset="-50" as="geometry" />
+        </mxCell>
+
+        <!-- System → Admin -->
+        <mxCell id="e_sys_a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1b5e20;endArrow=block;endFill=1;endSize=8;" edge="1" parent="1" source="system" target="admin">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="950" y="570" />
+              <mxPoint x="1310" y="570" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_sys_a" value="Audit Logs, Reports,&#10;System Status" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#1b5e20;fontStyle=1;" vertex="1" connectable="0" parent="e_sys_a">
+          <mxGeometry relative="0.5" offset="-30" as="geometry" />
+        </mxCell>
+
+        <!-- Management → System -->
+        <mxCell id="e_m_sys" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1565c0;endArrow=block;endFill=1;endSize=8;" edge="1" parent="1" source="management" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_m_sys" value="Analytics Requests,&#10;Report Exports" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#1565c0;fontStyle=1;" vertex="1" connectable="0" parent="e_m_sys">
+          <mxGeometry relative="0.5" offset="-30" as="geometry" />
+        </mxCell>
+
+        <!-- System → Management -->
+        <mxCell id="e_sys_m" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1b5e20;endArrow=block;endFill=1;endSize=8;" edge="1" parent="1" source="system" target="management">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="610" />
+              <mxPoint x="800" y="825" />
+              <mxPoint x="1010" y="825" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_sys_m" value="Dashboards, KPI Reports,&#10;CSV/PDF Exports" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#1b5e20;fontStyle=1;" vertex="1" connectable="0" parent="e_sys_m">
+          <mxGeometry relative="0.5" offset="20" as="geometry" />
+        </mxCell>
+
+        <!-- System → Email Service -->
+        <mxCell id="e_sys_email" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#ff6f00;endArrow=block;endFill=1;endSize=8;" edge="1" parent="1" source="system" target="emailService">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_sys_email" value="Email Templates,&#10;Notification Payloads" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#ff6f00;fontStyle=1;" vertex="1" connectable="0" parent="e_sys_email">
+          <mxGeometry relative="0.5" offset="30" as="geometry" />
+        </mxCell>
+
+        <!-- Email Service → System (delivery receipt) -->
+        <mxCell id="e_email_sys" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#ff6f00;endArrow=block;endFill=1;endSize=8;" edge="1" parent="1" source="emailService" target="system">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="750" y="860" />
+              <mxPoint x="650" y="860" />
+              <mxPoint x="650" y="610" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_email_sys" value="Delivery Status&#10;Receipts" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#ff6f00;fontStyle=1;" vertex="1" connectable="0" parent="e_email_sys">
+          <mxGeometry relative="0.5" offset="-80" as="geometry" />
+        </mxCell>
+
+        <!-- ========== LEGEND ========== -->
+        <mxCell id="legendBg" value="" style="rect;whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#bbb;strokeWidth=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1030" width="1600" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="legendTitle" value="LEGEND: DFD Level 0 (Context Diagram) — The entire system is shown as a SINGLE process surrounded by all external entities." style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1040" width="1500" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg1" value="🟡 Rectangle = External Entity (User/Service)     🔵 Ellipse = System (Single Process)     ➡ Blue Arrow = Input Data Flow     ➡ Green Arrow = Output Data Flow     ➡ Orange Arrow = External Service Flow" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;align=left;verticalAlign=top;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1065" width="1500" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg2" value="NOTE: All users interact bidirectionally with the system. The system is a black box at this level — internal processing details are shown in Level 1 and Level 2 DFDs." style="text;html=1;strokeColor=none;fillColor=none;fontSize=9;align=left;verticalAlign=top;fontColor=#555;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1090" width="1500" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

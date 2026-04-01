@@ -35,32 +35,44 @@ import {
   Group as GroupIcon,
   BarChart as BarChartIcon,
 } from '@mui/icons-material';
-import api from '../utils/api';
+import { analyticsAPI } from '../services/api';
 import { useThemeStore } from '../store/themeStore';
 
-const COLORS = ['#60a5fa', '#a78bfa', '#34d399', '#fbbf24', '#f87171', '#fb923c'];
+const COLORS = ['#10b981', '#34d399', '#6366f1', '#8b5cf6', '#475569', '#1e293b'];
 
 function Analytics() {
   const { mode } = useThemeStore();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [analyticsData, setAnalyticsData] = useState(null);
+  const [analyticsData, setAnalyticsData] = useState({
+    utilization_by_type: [],
+    daily_trends: [],
+    peak_hours: [],
+    top_resources: []
+  });
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
 
   useEffect(() => {
-    fetchAnalytics();
+    fetchAllAnalytics();
   }, []);
 
-  const fetchAnalytics = async (filters = {}) => {
+  const fetchAllAnalytics = async (filters = {}) => {
     try {
       setLoading(true);
       setError('');
-      const params = new URLSearchParams();
-      if (filters.start_date) params.append('start_date', filters.start_date);
-      if (filters.end_date) params.append('end_date', filters.end_date);
       
-      const response = await api.get(`/bookings/analytics/utilization?${params}`);
-      setAnalyticsData(response.data.data);
+      const [utilRes, peakRes, topRes] = await Promise.all([
+        analyticsAPI.getUtilization(filters),
+        analyticsAPI.getPeakHours(),
+        analyticsAPI.getTopResources()
+      ]);
+
+      setAnalyticsData({
+        utilization_by_type: utilRes.data.utilization_by_type || [],
+        daily_trends: utilRes.data.daily_trends || [],
+        peak_hours: peakRes.data.peak_hours || [],
+        top_resources: topRes.data.top_resources || []
+      });
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch analytics data');
     } finally {
@@ -69,10 +81,8 @@ function Analytics() {
   };
 
   const handleDateChange = (field, value) => {
-    const newRange = { ...dateRange, [field]: value };
-    setDateRange(newRange);
     if (newRange.start && newRange.end) {
-      fetchAnalytics({ start_date: newRange.start, end_date: newRange.end });
+      fetchAllAnalytics({ start_date: newRange.start, end_date: newRange.end });
     }
   };
 
@@ -96,7 +106,7 @@ function Analytics() {
     checkedIn: item.checked_in_count,
   })) || [];
 
-  const departmentData = analyticsData?.department_usage?.map(item => ({
+  const departmentData = analyticsData?.utilization_by_type?.map(item => ({
     name: item._id || 'Unknown',
     value: item.total_bookings,
   })) || [];
@@ -108,10 +118,10 @@ function Analytics() {
   })) || [];
 
   const topResourcesData = analyticsData?.top_resources?.map(item => ({
-    name: item.resource_name,
+    name: item.name,
     bookings: item.booking_count,
     hours: Math.round(item.total_hours),
-    type: item.resource_type,
+    type: item.type,
   })) || [];
 
   function getDayName(day) {
@@ -202,9 +212,9 @@ function Analytics() {
                 sx={{
                   py: 1.5,
                   borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                   '&:hover': {
-                    background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
+                    background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
                   },
                 }}
               >
@@ -226,12 +236,12 @@ function Analytics() {
               <CardContent>
                 <Box display="flex" alignItems="center" justifyContent="space-between">
                   <Box>
-                    <Typography variant="h3" sx={{ fontWeight: 700, mb: 1, color: '#667eea' }}>
+                    <Typography variant="h3" sx={{ fontWeight: 700, mb: 1, color: '#10b981' }}>
                       {totalBookings}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">Total Bookings</Typography>
                   </Box>
-                  <EventIcon sx={{ fontSize: 48, color: '#667eea', opacity: 0.7 }} />
+                  <EventIcon sx={{ fontSize: 48, color: '#10b981', opacity: 0.7 }} />
                 </Box>
               </CardContent>
             </Card>
@@ -433,7 +443,7 @@ function Analytics() {
                         <Chip 
                           label={resource.type} 
                           size="small"
-                          sx={{ mb: 1, background: 'rgba(102, 126, 234, 0.1)', color: '#667eea' }}
+                          sx={{ mb: 1, background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}
                         />
                         <Typography variant="body2" color="text.secondary">
                           {resource.bookings} bookings • {resource.hours} hours

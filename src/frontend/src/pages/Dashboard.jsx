@@ -72,33 +72,37 @@ function Dashboard() {
     {
       title: 'Total Bookings',
       value: stats.totalBookings,
-      icon: <BookOnlineIcon sx={{ fontSize: 40 }} />,
-      gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      bgColor: mode === 'dark' ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.05)',
+      icon: <BookOnlineIcon sx={{ fontSize: 32 }} />,
+      accent: '#10b981',
+      gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+      bgColor: mode === 'dark' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(16, 185, 129, 0.08)',
       change: '+12%',
     },
     {
       title: 'Pending Approval',
       value: stats.pendingBookings,
-      icon: <PendingActionsIcon sx={{ fontSize: 40 }} />,
-      gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-      bgColor: mode === 'dark' ? 'rgba(245, 87, 108, 0.1)' : 'rgba(245, 87, 108, 0.05)',
+      icon: <PendingActionsIcon sx={{ fontSize: 32 }} />,
+      accent: '#f59e0b',
+      gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+      bgColor: mode === 'dark' ? 'rgba(245, 158, 11, 0.15)' : 'rgba(245, 158, 11, 0.08)',
       change: '+5%',
     },
     {
       title: 'Approved',
       value: stats.approvedBookings,
-      icon: <CheckCircleIcon sx={{ fontSize: 40 }} />,
-      gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-      bgColor: mode === 'dark' ? 'rgba(0, 242, 254, 0.1)' : 'rgba(0, 242, 254, 0.05)',
+      icon: <CheckCircleIcon sx={{ fontSize: 32 }} />,
+      accent: '#34d399',
+      gradient: 'linear-gradient(135deg, #34d399 0%, #10b981 100%)',
+      bgColor: mode === 'dark' ? 'rgba(52, 211, 153, 0.15)' : 'rgba(52, 211, 153, 0.08)',
       change: '+8%',
     },
     {
-      title: 'Available Resources',
+      title: 'Resources',
       value: stats.totalResources,
-      icon: <MeetingRoomIcon sx={{ fontSize: 40 }} />,
-      gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-      bgColor: mode === 'dark' ? 'rgba(67, 233, 123, 0.1)' : 'rgba(67, 233, 123, 0.05)',
+      icon: <MeetingRoomIcon sx={{ fontSize: 32 }} />,
+      accent: '#8b5cf6',
+      gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+      bgColor: mode === 'dark' ? 'rgba(139, 92, 246, 0.15)' : 'rgba(139, 92, 246, 0.08)',
       change: '+3%',
     },
   ];
@@ -127,8 +131,8 @@ function Dashboard() {
             p: 4,
             mb: 4,
             background: mode === 'dark'
-              ? 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)'
-              : 'linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)',
+              ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 5, 5, 0.15) 100%)'
+              : 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%)',
           }}
         >
           <Grid container spacing={3} alignItems="center">
@@ -137,7 +141,7 @@ function Dashboard() {
                 sx={{
                   width: 80,
                   height: 80,
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                   fontSize: '2rem',
                   fontWeight: 'bold',
                 }}
@@ -168,58 +172,67 @@ function Dashboard() {
                   ...glassStyle,
                   position: 'relative',
                   overflow: 'hidden',
-                  transition: 'all 0.3s ease',
+                  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                  borderTop: `4px solid ${stat.accent}`,
                   '&:hover': {
-                    transform: 'translateY(-8px)',
+                    transform: 'translateY(-10px)',
                     boxShadow: mode === 'dark'
-                      ? '0 12px 40px 0 rgba(0, 0, 0, 0.5)'
-                      : '0 12px 40px 0 rgba(31, 38, 135, 0.25)',
+                      ? `0 20px 40px -12px ${stat.accent}33`
+                      : `0 20px 40px -12px ${stat.accent}22`,
+                    '& .stat-icon-box': {
+                      transform: 'scale(1.1) rotate(5deg)',
+                    }
                   },
                 }}
               >
                 <Box
                   sx={{
                     position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    width: '100px',
-                    height: '100px',
-                    background: stat.gradient,
-                    opacity: 0.1,
-                    borderRadius: '0 0 0 100%',
+                    top: -20,
+                    right: -20,
+                    width: '120px',
+                    height: '120px',
+                    background: `radial-gradient(circle, ${stat.accent}15 0%, transparent 70%)`,
+                    borderRadius: '50%',
                   }}
                 />
-                <CardContent sx={{ p: 3 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                <CardContent sx={{ p: 3, position: 'relative', zIndex: 1 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
                     <Box
+                      className="stat-icon-box"
                       sx={{
-                        width: 60,
-                        height: 60,
-                        borderRadius: '15px',
+                        width: 56,
+                        height: 56,
+                        borderRadius: '16px',
                         background: stat.bgColor,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: 'primary.main',
+                        color: stat.accent,
+                        transition: 'transform 0.3s ease',
+                        boxShadow: `0 8px 16px -4px ${stat.accent}33`,
                       }}
                     >
                       {stat.icon}
                     </Box>
-                    <Chip
-                      label={stat.change}
-                      size="small"
-                      icon={<TrendingUpIcon />}
-                      sx={{
-                        background: 'rgba(67, 233, 123, 0.1)',
-                        color: '#43e97b',
-                        fontWeight: 'bold',
-                      }}
-                    />
+                    <Box sx={{ textAlign: 'right' }}>
+                      <Chip
+                        label={stat.change}
+                        size="small"
+                        sx={{
+                          background: `${stat.accent}15`,
+                          color: stat.accent,
+                          fontWeight: 'bold',
+                          borderRadius: '8px',
+                          border: `1px solid ${stat.accent}33`,
+                        }}
+                      />
+                    </Box>
                   </Box>
-                  <Typography variant="h3" fontWeight="bold" gutterBottom>
+                  <Typography variant="h3" fontWeight="800" sx={{ mb: 0.5, letterSpacing: '-0.02em' }}>
                     {loading ? '...' : stat.value}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 500, letterSpacing: '0.01em', textTransform: 'uppercase', fontSize: '0.75rem' }}>
                     {stat.title}
                   </Typography>
                 </CardContent>
@@ -273,14 +286,17 @@ function Dashboard() {
                             label={booking.status}
                             size="small"
                             sx={{
-                              background: booking.status === 'approved' ? 'rgba(67, 233, 123, 0.1)' :
-                                         booking.status === 'pending' ? 'rgba(245, 87, 108, 0.1)' :
-                                         'rgba(158, 158, 158, 0.1)',
-                              color: booking.status === 'approved' ? '#43e97b' :
-                                     booking.status === 'pending' ? '#f5576c' :
-                                     '#9e9e9e',
-                              fontWeight: 'bold',
-                              textTransform: 'capitalize',
+                              background: booking.status === 'approved' ? 'rgba(16, 185, 129, 0.15)' :
+                                         booking.status === 'pending' || booking.status === 'pending_faculty' || booking.status === 'pending_coordinator' ? 'rgba(245, 158, 11, 0.15)' :
+                                         'rgba(148, 163, 184, 0.15)',
+                              color: booking.status === 'approved' ? '#10b981' :
+                                     booking.status === 'pending' || booking.status === 'pending_faculty' || booking.status === 'pending_coordinator' ? '#f59e0b' :
+                                     '#94a3b8',
+                              fontWeight: '600',
+                              fontSize: '0.7rem',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.05em',
+                              borderRadius: '6px',
                             }}
                           />
                         </Grid>
@@ -326,7 +342,7 @@ function Dashboard() {
                       background: mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
                       '& .MuiLinearProgress-bar': {
                         borderRadius: 4,
-                        background: 'linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)',
+                        background: 'linear-gradient(90deg, #10b981 0%, #34d399 100%)',
                       },
                     }}
                   />
@@ -349,7 +365,7 @@ function Dashboard() {
                       background: mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
                       '& .MuiLinearProgress-bar': {
                         borderRadius: 4,
-                        background: 'linear-gradient(90deg, #4facfe 0%, #00f2fe 100%)',
+                        background: 'linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%)',
                       },
                     }}
                   />
@@ -368,7 +384,7 @@ function Dashboard() {
                       background: mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
                       '& .MuiLinearProgress-bar': {
                         borderRadius: 4,
-                        background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)',
+                        background: 'linear-gradient(90deg, #10b981 0%, #059669 100%)',
                       },
                     }}
                   />

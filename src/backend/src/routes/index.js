@@ -9,11 +9,13 @@ const router = express.Router();
 const authRoutes = require('./authRoutes');
 const resourceRoutes = require('./resourceRoutes');
 const bookingRoutes = require('./bookingRoutes');
+const analyticsRoutes = require('./analyticsRoutes');
 
 // Mount routes
 router.use('/auth', authRoutes);
 router.use('/resources', resourceRoutes);
 router.use('/bookings', bookingRoutes);
+router.use('/analytics', analyticsRoutes);
 
 // API info endpoint
 router.get('/', (req, res) => {

@@ -5,6 +5,7 @@
 
 const { Booking, Resource, User } = require('../models');
 const logger = require('../utils/logger');
+const notificationService = require('../services/notificationService');
 const QRCode = require('qrcode');
 const { v4: uuidv4 } = require('uuid');
 
@@ -282,15 +283,18 @@ exports.createBooking = async (req, res, next) => {
       });
     }
 
-    // Generate QR code for booking
-    const qrData = {
-      bookingId: uuidv4(),
-      resourceId: resource_id,
-      userId: req.user.id,
-      startTime: start_time,
-      type: 'booking-checkin'
-    };
-    const qrCode = await QRCode.toDataURL(JSON.stringify(qrData));
+    // Define initial status based on role and resource requirements
+    let initialStatus = 'approved';
+    if (resource.requires_approval) {
+      if (req.user.role === 'student') {
+        initialStatus = 'pending_faculty';
+      } else if (req.user.role === 'faculty') {
+        // Faculty bookings might still need coordinator for high-capacity labs
+        initialStatus = resource.capacity > 50 ? 'pending_coordinator' : 'pending';
+      } else {
+        initialStatus = 'pending';
+      }
+    }
 
     // Create booking
     const booking = new Booking({
@@ -301,9 +305,19 @@ exports.createBooking = async (req, res, next) => {
       purpose,
       attendees_count,
       special_requirements,
-      status: resource.requires_approval ? 'pending' : 'approved',
-      qr_code: qrCode
+      status: initialStatus
     });
+    await booking.save();
+
+    // Generate QR code with the persisted booking ID so scanner can resolve it directly.
+    const qrData = {
+      bookingId: booking._id.toString(),
+      resourceId: resource_id,
+      userId: req.user.id,
+      startTime: start_time,
+      type: 'booking-checkin'
+    };
+    booking.qr_code = await QRCode.toDataURL(JSON.stringify(qrData));
     await booking.save();
 
     // Fetch complete booking with associations
@@ -318,6 +332,9 @@ exports.createBooking = async (req, res, next) => {
       message: 'Booking request submitted successfully',
       data: { booking: completeBooking }
     });
+
+    // Send notification (async)
+    notificationService.notifyBookingRequest(req.user, booking, resource);
   } catch (error) {
     next(error);
   }
@@ -340,7 +357,7 @@ exports.approveBooking = async (req, res, next) => {
       });
     }
 
-    if (booking.status !== 'pending') {
+    if (!['pending', 'pending_faculty', 'pending_coordinator'].includes(booking.status)) {
       return res.status(400).json({
         success: false,
         message: `Cannot approve booking with status: ${booking.status}`
@@ -362,10 +379,29 @@ exports.approveBooking = async (req, res, next) => {
       });
     }
 
-    booking.status = 'approved';
+    // Handle multi-level transition
+    let nextStatus = 'approved';
+    if (booking.status === 'pending_faculty') {
+      // If approved by faculty, might still need coordinator for large resources
+      nextStatus = booking.resource_id.capacity > 50 ? 'pending_coordinator' : 'approved';
+    } else if (booking.status === 'pending_coordinator') {
+      nextStatus = 'approved';
+    }
+
+    booking.status = nextStatus;
     booking.approved_by = req.user.id;
     booking.approval_notes = approval_notes;
     await booking.save();
+
+    // Trigger notifications based on new status
+    const bookingUser = await User.findById(booking.user_id);
+    if (nextStatus === 'approved') {
+      notificationService.notifyBookingApproval(bookingUser, booking, booking.resource_id);
+    } else {
+      // Notifying that it moved to next level (coordinator)
+      notificationService.sendEmail(bookingUser.email, `UniServe: Booking Moved to Coordinator`, 
+        `Your booking for ${booking.resource_id.name} has been approved by Faculty and is now with the Coordinator.`);
+    }
 
     logger.info(`Booking approved: ${booking._id} by user ${req.user.id}`);
 
@@ -414,6 +450,10 @@ exports.rejectBooking = async (req, res, next) => {
     booking.approved_by = req.user.id;
     booking.rejection_reason = rejection_reason;
     await booking.save();
+
+    const bookingUser = await User.findById(booking.user_id);
+    const resource = await Resource.findById(booking.resource_id);
+    notificationService.notifyBookingRejection(bookingUser, booking, resource, rejection_reason);
 
     logger.info(`Booking rejected: ${booking._id} by user ${req.user.id}`);
 
@@ -569,14 +609,35 @@ exports.checkInBooking = async (req, res, next) => {
       });
     }
 
-    // Validate QR code (basic validation - compare with stored QR or validate structure)
+    // Validate QR code payload if provided.
     if (qr_code_data) {
       try {
-        const qrData = JSON.parse(qr_code_data);
-        if (qrData.type !== 'booking-checkin' || qrData.resourceId !== booking.resource_id._id.toString()) {
+        let qrData = null;
+
+        if (typeof qr_code_data === 'string' && qr_code_data.startsWith('{')) {
+          qrData = JSON.parse(qr_code_data);
+        } else if (typeof qr_code_data === 'string' && qr_code_data.startsWith('booking_')) {
+          qrData = { bookingId: qr_code_data.split('_')[1], type: 'booking-checkin' };
+        }
+
+        if (!qrData || qrData.type !== 'booking-checkin') {
           return res.status(400).json({
             success: false,
-            message: 'Invalid QR code for this booking'
+            message: 'Invalid QR code for this booking type'
+          });
+        }
+
+        if (qrData.bookingId && qrData.bookingId !== booking._id.toString()) {
+          return res.status(400).json({
+            success: false,
+            message: 'QR code does not match this booking'
+          });
+        }
+
+        if (qrData.resourceId && qrData.resourceId !== booking.resource_id._id.toString()) {
+          return res.status(400).json({
+            success: false,
+            message: 'QR code resource mismatch'
           });
         }
       } catch (e) {
@@ -588,11 +649,15 @@ exports.checkInBooking = async (req, res, next) => {
     }
 
     // Update booking status
+    // Update booking status
     booking.status = 'checked_in';
     booking.check_in_time = now;
     await booking.save();
 
     logger.info(`Booking checked in: ${booking._id}`);
+
+    // Notify check-in
+    notificationService.notifyCheckIn(booking.user_id, booking, booking.resource_id);
 
     res.status(200).json({
       success: true,
@@ -605,155 +670,44 @@ exports.checkInBooking = async (req, res, next) => {
 };
 
 /**
- * Get resource utilization analytics
- * GET /api/v1/bookings/analytics/utilization
+ * QR Code Check-Out
+ * POST /api/v1/bookings/:id/checkout
  */
-exports.getUtilizationAnalytics = async (req, res, next) => {
+exports.checkOutBooking = async (req, res, next) => {
   try {
-    const { start_date, end_date, resource_type, department } = req.query;
+    const booking = await Booking.findById(req.params.id)
+      .populate('resource_id')
+      .populate('user_id', 'name email');
 
-    const matchStage = {
-      status: { $in: ['approved', 'checked_in', 'completed'] }
-    };
-
-    if (start_date && end_date) {
-      matchStage.start_time = {
-        $gte: new Date(start_date),
-        $lte: new Date(end_date)
-      };
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: 'Booking not found'
+      });
     }
 
-    // Overall utilization by resource type
-    const utilizationByType = await Booking.aggregate([
-      { $match: matchStage },
-      {
-        $lookup: {
-          from: 'resources',
-          localField: 'resource_id',
-          foreignField: '_id',
-          as: 'resource'
-        }
-      },
-      { $unwind: '$resource' },
-      ...(resource_type ? [{ $match: { 'resource.type': resource_type } }] : []),
-      ...(department ? [{ $match: { 'resource.department': department } }] : []),
-      {
-        $group: {
-          _id: '$resource.type',
-          total_bookings: { $sum: 1 },
-          total_hours: {
-            $sum: {
-              $divide: [
-                { $subtract: ['$end_time', '$start_time'] },
-                1000 * 60 * 60
-              ]
-            }
-          },
-          checked_in_count: {
-            $sum: { $cond: [{ $eq: ['$status', 'checked_in'] }, 1, 0] }
-          }
-        }
-      },
-      { $sort: { total_bookings: -1 } }
-    ]);
+    if (booking.status !== 'checked_in') {
+      return res.status(400).json({
+        success: false,
+        message: 'Only checked-in bookings can be checked out'
+      });
+    }
 
-    // Peak hours analysis
-    const peakHours = await Booking.aggregate([
-      { $match: matchStage },
-      {
-        $project: {
-          hour: { $hour: '$start_time' },
-          day_of_week: { $dayOfWeek: '$start_time' }
-        }
-      },
-      {
-        $group: {
-          _id: { hour: '$hour', day: '$day_of_week' },
-          count: { $sum: 1 }
-        }
-      },
-      { $sort: { count: -1 } },
-      { $limit: 10 }
-    ]);
+    booking.status = 'completed';
+    booking.end_time = new Date(); // Actual end time
+    await booking.save();
 
-    // Department-wise usage
-    const departmentUsage = await Booking.aggregate([
-      { $match: matchStage },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'user_id',
-          foreignField: '_id',
-          as: 'user'
-        }
-      },
-      { $unwind: '$user' },
-      {
-        $group: {
-          _id: '$user.department',
-          total_bookings: { $sum: 1 },
-          total_hours: {
-            $sum: {
-              $divide: [
-                { $subtract: ['$end_time', '$start_time'] },
-                1000 * 60 * 60
-              ]
-            }
-          }
-        }
-      },
-      { $sort: { total_bookings: -1 } }
-    ]);
-
-    // Most booked resources
-    const topResources = await Booking.aggregate([
-      { $match: matchStage },
-      {
-        $group: {
-          _id: '$resource_id',
-          booking_count: { $sum: 1 },
-          total_hours: {
-            $sum: {
-              $divide: [
-                { $subtract: ['$end_time', '$start_time'] },
-                1000 * 60 * 60
-              ]
-            }
-          }
-        }
-      },
-      {
-        $lookup: {
-          from: 'resources',
-          localField: '_id',
-          foreignField: '_id',
-          as: 'resource'
-        }
-      },
-      { $unwind: '$resource' },
-      {
-        $project: {
-          resource_name: '$resource.name',
-          resource_type: '$resource.type',
-          location: '$resource.location',
-          booking_count: 1,
-          total_hours: 1
-        }
-      },
-      { $sort: { booking_count: -1 } },
-      { $limit: 10 }
-    ]);
+    logger.info(`Booking checked out: ${booking._id}`);
 
     res.status(200).json({
       success: true,
-      data: {
-        utilization_by_type: utilizationByType,
-        peak_hours: peakHours,
-        department_usage: departmentUsage,
-        top_resources: topResources
-      }
+      message: 'Successfully checked out',
+      data: { booking }
     });
   } catch (error) {
     next(error);
   }
 };
+
+
+module.exports = exports;

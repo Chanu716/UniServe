@@ -24,7 +24,7 @@ import {
   Info as InfoIcon,
 } from '@mui/icons-material';
 import { Html5Qrcode } from 'html5-qrcode';
-import api from '../utils/api';
+import { bookingAPI } from '../services/api';
 import { toast } from 'react-toastify';
 import { useThemeStore } from '../store/themeStore';
 
@@ -89,17 +89,20 @@ function QRScanner() {
       setLoading(true);
       setError('');
 
-      // QR code format: booking_<bookingId> or resource_<resourceId>
-      const parts = qrCode.split('_');
-      
-      if (parts[0] !== 'booking') {
-        throw new Error('Invalid QR code. This appears to be a resource QR code, not a booking.');
+      let bookingId = null;
+      if (typeof qrCode === 'string' && qrCode.startsWith('{')) {
+        const parsed = JSON.parse(qrCode);
+        bookingId = parsed.bookingId || parsed.booking_id || null;
+      } else if (typeof qrCode === 'string' && qrCode.startsWith('booking_')) {
+        bookingId = qrCode.split('_')[1];
       }
 
-      const bookingId = parts[1];
-      const response = await api.post(`/bookings/${bookingId}/checkin`, { qr_code: qrCode });
-      
-      setBookingDetails(response.data.data);
+      if (!bookingId) {
+        throw new Error('Invalid booking QR code payload');
+      }
+
+      const response = await bookingAPI.checkIn(bookingId, qrCode);
+      setBookingDetails(response.data.booking);
       setCheckInSuccess(true);
       toast.success('Check-in successful!');
     } catch (err) {
@@ -144,7 +147,7 @@ function QRScanner() {
     boxShadow: mode === 'dark'
       ? '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
       : '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
-  };
+        };
 
   return (
     <Box sx={{ p: { xs: 2, md: 3 } }}>
@@ -164,7 +167,7 @@ function QRScanner() {
         <CardContent sx={{ p: 4 }}>
           {!scanning && !result && (
             <Box textAlign="center" py={4}>
-              <QrCodeScannerIcon sx={{ fontSize: 120, color: '#667eea', mb: 3 }} />
+              <QrCodeScannerIcon sx={{ fontSize: 120, color: '#10b981', mb: 3 }} />
               <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
                 Ready to Scan
               </Typography>
@@ -180,12 +183,12 @@ function QRScanner() {
                   px: 4,
                   py: 1.5,
                   borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                   fontWeight: 'bold',
                   textTransform: 'none',
-                  boxShadow: '0 4px 15px 0 rgba(102, 126, 234, 0.4)',
+                  boxShadow: '0 4px 15px 0 rgba(16, 185, 129, 0.4)',
                   '&:hover': {
-                    background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
+                    background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
                   },
                 }}
               >
@@ -301,12 +304,12 @@ function QRScanner() {
               background: mode === 'dark' ? 'rgba(67, 233, 123, 0.1)' : 'rgba(67, 233, 123, 0.1)',
             }}>
               <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
-                {bookingDetails.resource?.name}
+                {bookingDetails.resource_id?.name}
               </Typography>
               <Box display="flex" flexDirection="column" gap={1}>
                 <Box display="flex" gap={1}>
                   <Chip 
-                    label={bookingDetails.resource?.type} 
+                    label={bookingDetails.resource_id?.type} 
                     size="small"
                     sx={{ background: 'rgba(102, 126, 234, 0.2)', color: '#667eea', fontWeight: 600 }}
                   />

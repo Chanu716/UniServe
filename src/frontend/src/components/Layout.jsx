@@ -51,9 +51,14 @@ function Layout() {
   const { mode, toggleTheme } = useThemeStore();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+  const handleDrawerToggle = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
   };
 
   const handleOpenUserMenu = (event) => {
@@ -74,166 +79,186 @@ function Layout() {
     return item.roles.includes(user?.role);
   });
 
-  const drawer = (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Toolbar sx={{ 
-        background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-        color: 'white',
-      }}>
-        <Typography variant="h5" noWrap component="div" sx={{ fontWeight: 700, letterSpacing: '0.5px' }}>
-          🎓 UniServe
-        </Typography>
-      </Toolbar>
-      <Divider />
-      <List sx={{ flexGrow: 1, pt: 2 }}>
-        {filteredMenuItems.map((item) => (
-          <ListItem key={item.text} disablePadding sx={{ mb: 1, px: 1.5 }}>
-            <ListItemButton 
-              onClick={() => navigate(item.path)}
-              sx={{
-                borderRadius: 2,
-                '&:hover': {
-                  backgroundColor: theme.palette.mode === 'dark' 
-                    ? 'rgba(96, 165, 250, 0.1)' 
-                    : 'rgba(59, 130, 246, 0.1)',
-                  transform: 'translateX(4px)',
-                },
-                transition: 'all 0.2s ease',
-              }}
-            >
-              <ListItemIcon sx={{ color: theme.palette.primary.main }}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <Box sx={{ p: 2 }}>
-        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', textAlign: 'center', mb: 1 }}>
-          {user?.name}
-        </Typography>
-        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', textAlign: 'center' }}>
-          {user?.role?.toUpperCase()}
-        </Typography>
-      </Box>
-    </Box>
-  );
-
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <AppBar
-        position="fixed"
+        position="sticky"
         sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          px: { xs: 1, md: 4 },
         }}
       >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 600 }}>
-            Campus Resource Booking System
-          </Typography>
-          
-          <Tooltip title={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}>
-            <IconButton onClick={toggleTheme} color="inherit" sx={{ mr: 2 }}>
-              {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-            </IconButton>
-          </Tooltip>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar sx={{ 
-                  bgcolor: 'secondary.main',
-                  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-                }}>
-                  {user?.name?.charAt(0).toUpperCase()}
-                </Avatar>
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+        <Container maxWidth="xl" disableGutters>
+          <Toolbar disableGutters>
+            <Typography
+              variant="h5"
+              noWrap
+              component="div"
+              sx={{
+                mr: 4,
+                display: { xs: 'none', md: 'flex' },
+                fontWeight: 800,
+                letterSpacing: '.1rem',
+                color: 'inherit',
+                textDecoration: 'none',
+                cursor: 'pointer',
               }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+              onClick={() => navigate('/dashboard')}
             >
-              <MenuItem onClick={() => { navigate('/profile'); handleCloseUserMenu(); }}>
-                <ListItemIcon>
-                  <AccountCircleIcon fontSize="small" />
-                </ListItemIcon>
-                <Typography textAlign="center">Profile</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleLogout}>
-                <ListItemIcon>
-                  <LogoutIcon fontSize="small" />
-                </ListItemIcon>
-                <Typography textAlign="center">Logout</Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
-        </Toolbar>
+              🎓 UNISERVE
+            </Typography>
+
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleDrawerToggle}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: 'block', md: 'none' },
+                  '& .MuiPaper-root': {
+                    mt: 1.5,
+                  },
+                }}
+              >
+                {filteredMenuItems.map((item) => (
+                  <MenuItem key={item.text} onClick={() => { navigate(item.path); handleCloseNavMenu(); }}>
+                    <ListItemIcon sx={{ color: 'primary.main' }}>
+                      {item.icon}
+                    </ListItemIcon>
+                    <Typography textAlign="center">{item.text}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+
+            <Typography
+              variant="h5"
+              noWrap
+              component="div"
+              sx={{
+                flexGrow: 1,
+                display: { xs: 'flex', md: 'none' },
+                fontWeight: 800,
+                letterSpacing: '.1rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              🎓 UNISERVE
+            </Typography>
+
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: 1 }}>
+              {filteredMenuItems.map((item) => (
+                <Button
+                  key={item.text}
+                  onClick={() => navigate(item.path)}
+                  startIcon={item.icon}
+                  sx={{
+                    my: 2,
+                    color: 'inherit',
+                    display: 'flex',
+                    borderRadius: '12px',
+                    px: 2,
+                    opacity: 0.8,
+                    '&:hover': {
+                      opacity: 1,
+                      backgroundColor: mode === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                    },
+                  }}
+                >
+                  {item.text}
+                </Button>
+              ))}
+            </Box>
+
+            <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Tooltip title={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}>
+                <IconButton onClick={toggleTheme} color="inherit">
+                  {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar
+                    sx={{
+                      bgcolor: 'primary.main',
+                      background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                    }}
+                  >
+                    {user?.name?.charAt(0).toUpperCase()}
+                  </Avatar>
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <Box sx={{ px: 2, py: 1.5, minWidth: 160 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>{user?.name}</Typography>
+                  <Typography variant="caption" color="text.secondary">{user?.role?.toUpperCase()}</Typography>
+                </Box>
+                <Divider />
+                <MenuItem onClick={() => { navigate('/profile'); handleCloseUserMenu(); }}>
+                  <ListItemIcon>
+                    <AccountCircleIcon fontSize="small" />
+                  </ListItemIcon>
+                  <Typography textAlign="center">Profile</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <ListItemIcon>
+                    <LogoutIcon fontSize="small" />
+                  </ListItemIcon>
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          </Toolbar>
+        </Container>
       </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-      >
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true,
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-      </Box>
+
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          backgroundColor: theme.palette.background.default,
-          minHeight: '100vh',
+          p: { xs: 2, md: 4, lg: 6 },
+          transition: 'padding 0.3s ease',
         }}
       >
-        <Toolbar />
-        <Container maxWidth="xl" sx={{ py: 2 }}>
+        <Container maxWidth="xl" disableGutters>
           <Outlet />
         </Container>
       </Box>

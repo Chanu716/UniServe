@@ -84,7 +84,7 @@ function Login() {
         justifyContent: 'center',
         background: mode === 'dark'
           ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)'
-          : 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+          : 'linear-gradient(135deg, #10b981 0%, #059669 50%, #34d399 100%)',
         p: 2,
       }}
     >
@@ -97,7 +97,7 @@ function Login() {
                 sx={{
                   width: 80,
                   height: 80,
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                 }}
               >
                 <LoginIcon sx={{ fontSize: 40 }} />
@@ -112,7 +112,7 @@ function Login() {
               fontWeight="bold"
               gutterBottom
               sx={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -242,7 +242,7 @@ function Login() {
                   to="/register" 
                   variant="body2"
                   sx={{
-                    color: mode === 'dark' ? '#667eea' : '#764ba2',
+                    color: mode === 'dark' ? '#10b981' : '#059669',
                     fontWeight: 600,
                     textDecoration: 'none',
                     '&:hover': {

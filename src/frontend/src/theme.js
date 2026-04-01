@@ -4,18 +4,19 @@ export const getTheme = (mode) => createTheme({
   palette: {
     mode,
     primary: {
-      main: mode === 'dark' ? '#60a5fa' : '#3b82f6',
-      light: mode === 'dark' ? '#93c5fd' : '#60a5fa',
-      dark: mode === 'dark' ? '#3b82f6' : '#2563eb',
+      main: mode === 'dark' ? '#10b981' : '#059669',
+      light: mode === 'dark' ? '#34d399' : '#10b981',
+      dark: mode === 'dark' ? '#059669' : '#047857',
     },
     secondary: {
-      main: mode === 'dark' ? '#a78bfa' : '#8b5cf6',
-      light: mode === 'dark' ? '#c4b5fd' : '#a78bfa',
-      dark: mode === 'dark' ? '#8b5cf6' : '#7c3aed',
+      main: mode === 'dark' ? '#8b5cf6' : '#7c3aed',
+      light: mode === 'dark' ? '#a78bfa' : '#8b5cf6',
+      dark: mode === 'dark' ? '#7c3aed' : '#6d28d9',
     },
     background: {
-      default: mode === 'dark' ? '#0f172a' : '#f8fafc',
-      paper: mode === 'dark' ? '#1e293b' : '#ffffff',
+      default: mode === 'dark' ? '#050505' : '#f8fafc',
+      paper: mode === 'dark' ? '#111111' : '#ffffff',
+      glass: mode === 'dark' ? 'rgba(10, 10, 10, 0.7)' : 'rgba(255, 255, 255, 0.7)',
     },
     text: {
       primary: mode === 'dark' ? '#f1f5f9' : '#0f172a',
@@ -97,15 +98,15 @@ export const getTheme = (mode) => createTheme({
         root: {
           backgroundImage: 'none',
           backgroundColor: mode === 'dark' 
-            ? 'rgba(30, 41, 59, 0.7)' 
-            : 'rgba(255, 255, 255, 0.7)',
-          backdropFilter: 'blur(20px) saturate(180%)',
+            ? 'rgba(30, 41, 59, 0.4)' 
+            : 'rgba(255, 255, 255, 0.4)',
+          backdropFilter: 'blur(24px) saturate(200%)',
           border: mode === 'dark' 
-            ? '1px solid rgba(148, 163, 184, 0.1)' 
-            : '1px solid rgba(226, 232, 240, 0.8)',
+            ? '1px solid rgba(255, 255, 255, 0.05)' 
+            : '1px solid rgba(255, 255, 255, 0.5)',
           boxShadow: mode === 'dark'
-            ? '0 8px 32px rgba(0, 0, 0, 0.3)'
-            : '0 8px 32px rgba(15, 23, 42, 0.08)',
+            ? '0 8px 32px rgba(0, 0, 0, 0.2)'
+            : '0 8px 32px rgba(15, 23, 42, 0.05)',
         },
       },
     },
@@ -114,15 +115,16 @@ export const getTheme = (mode) => createTheme({
         root: {
           backgroundImage: 'none',
           backgroundColor: mode === 'dark' 
-            ? 'rgba(30, 41, 59, 0.7)' 
-            : 'rgba(255, 255, 255, 0.7)',
-          backdropFilter: 'blur(20px) saturate(180%)',
+            ? 'rgba(30, 41, 59, 0.3)' 
+            : 'rgba(255, 255, 255, 0.3)',
+          backdropFilter: 'blur(30px) saturate(200%)',
           border: mode === 'dark' 
-            ? '1px solid rgba(148, 163, 184, 0.1)' 
-            : '1px solid rgba(226, 232, 240, 0.8)',
+            ? '1px solid rgba(255, 255, 255, 0.08)' 
+            : '1px solid rgba(255, 255, 255, 0.5)',
+          borderRadius: 24,
           boxShadow: mode === 'dark'
-            ? '0 8px 32px rgba(0, 0, 0, 0.3)'
-            : '0 8px 32px rgba(15, 23, 42, 0.08)',
+            ? '0 12px 40px rgba(0, 0, 0, 0.3)'
+            : '0 12px 40px rgba(15, 23, 42, 0.06)',
         },
       },
     },
@@ -131,13 +133,14 @@ export const getTheme = (mode) => createTheme({
         root: {
           backgroundImage: 'none',
           backgroundColor: mode === 'dark' 
-            ? 'rgba(15, 23, 42, 0.8)' 
-            : 'rgba(248, 250, 252, 0.8)',
-          backdropFilter: 'blur(20px) saturate(180%)',
+            ? 'rgba(15, 23, 42, 0.6)' 
+            : 'rgba(255, 255, 255, 0.6)',
+          backdropFilter: 'blur(16px) saturate(180%)',
           borderBottom: mode === 'dark' 
-            ? '1px solid rgba(148, 163, 184, 0.1)' 
-            : '1px solid rgba(226, 232, 240, 0.8)',
+            ? '1px solid rgba(255, 255, 255, 0.08)' 
+            : '1px solid rgba(0, 0, 0, 0.08)',
           boxShadow: 'none',
+          color: mode === 'dark' ? '#f1f5f9' : '#0f172a',
         },
       },
     },

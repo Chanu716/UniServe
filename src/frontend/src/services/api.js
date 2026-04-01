@@ -89,4 +89,31 @@ export const bookingAPI = {
     const response = await api.put(`/bookings/${id}/cancel`);
     return response.data;
   },
+
+  checkIn: async (id, qrCodeData) => {
+    const response = await api.post(`/bookings/${id}/checkin`, { qr_code_data: qrCodeData });
+    return response.data;
+  },
+
+  checkOut: async (id) => {
+    const response = await api.post(`/bookings/${id}/checkout`);
+    return response.data;
+  },
+};
+
+export const analyticsAPI = {
+  getUtilization: async (params) => {
+    const response = await api.get('/analytics/utilization', { params });
+    return response.data;
+  },
+
+  getPeakHours: async () => {
+    const response = await api.get('/analytics/peak-hours');
+    return response.data;
+  },
+
+  getTopResources: async () => {
+    const response = await api.get('/analytics/top-resources');
+    return response.data;
+  },
 };

@@ -180,7 +180,7 @@ function Resources() {
           </Grid>
         ) : (
           resources.map((resource, index) => (
-            <Grid item xs={12} sm={6} lg={4} key={resource.id}>
+            <Grid item xs={12} sm={6} lg={4} key={resource._id}>
               <Grow in timeout={600 + (index % 9) * 100}>
                 <Card
                   sx={{

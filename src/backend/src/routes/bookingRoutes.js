@@ -33,13 +33,13 @@ const checkInValidation = [
 
 // Routes
 router.get('/available', authenticate, searchAvailableValidation, bookingController.searchAvailable);
-router.get('/analytics/utilization', authenticate, authorize('coordinator', 'admin', 'management'), bookingController.getUtilizationAnalytics);
 router.get('/', authenticate, bookingController.getBookings);
 router.get('/:id', authenticate, bookingController.getBooking);
 router.post('/', authenticate, createBookingValidation, bookingController.createBooking);
 
-// QR Check-in
+// QR Check-in and Check-out
 router.post('/:id/checkin', authenticate, checkInValidation, bookingController.checkInBooking);
+router.post('/:id/checkout', authenticate, bookingController.checkOutBooking);
 
 // Coordinator and Admin routes
 router.put('/:id/approve', authenticate, authorize('coordinator', 'admin'), bookingController.approveBooking);

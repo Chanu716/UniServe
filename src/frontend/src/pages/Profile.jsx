@@ -309,7 +309,7 @@ function Profile() {
                     mt: 3,
                     py: 1.5,
                     borderRadius: '12px',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                     fontWeight: 'bold',
                     textTransform: 'none',
                     boxShadow: '0 4px 15px 0 rgba(102, 126, 234, 0.4)',

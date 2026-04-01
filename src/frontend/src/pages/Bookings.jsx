@@ -95,6 +95,9 @@ function Bookings() {
       } else if (type === 'cancel') {
         await bookingAPI.cancel(bookingId);
         toast.success('Booking cancelled');
+      } else if (type === 'checkout') {
+        await bookingAPI.checkOut(bookingId);
+        toast.success('Checked out successfully');
       }
 
       handleCloseActionDialog();
@@ -102,6 +105,10 @@ function Bookings() {
     } catch (error) {
       toast.error(error.response?.data?.message || 'Action failed');
     }
+  };
+
+  const handleCheckOut = (bookingId) => {
+    handleOpenActionDialog('checkout', bookingId);
   };
 
   const handleShowQR = (booking) => {
@@ -117,7 +124,12 @@ function Bookings() {
   };
 
   const canApproveReject = ['coordinator', 'admin'].includes(user?.role);
-  const canCancel = (booking) => booking.user_id === user?.id || user?.role === 'admin';
+  const getBookingUserId = (booking) => {
+    if (!booking?.user_id) return null;
+    return typeof booking.user_id === 'string' ? booking.user_id : booking.user_id._id;
+  };
+
+  const canCancel = (booking) => getBookingUserId(booking) === user?.id || user?.role === 'admin';
 
   const glassStyle = {
     background: mode === 'dark' 
@@ -136,10 +148,14 @@ function Bookings() {
   const getStatusColor = (status) => {
     switch(status) {
       case 'approved': return { bg: 'rgba(67, 233, 123, 0.1)', color: '#43e97b' };
-      case 'pending': return { bg: 'rgba(251, 191, 36, 0.1)', color: '#fbbf24' };
+      case 'pending':
+      case 'pending_faculty':
+      case 'pending_coordinator':
+        return { bg: 'rgba(251, 191, 36, 0.1)', color: '#fbbf24' };
       case 'rejected': return { bg: 'rgba(245, 87, 108, 0.1)', color: '#f5576c' };
       case 'cancelled': return { bg: 'rgba(158, 158, 158, 0.1)', color: '#9e9e9e' };
-      case 'completed': return { bg: 'rgba(79, 172, 254, 0.1)', color: '#4facfe' };
+      case 'checked_in': return { bg: 'rgba(79, 172, 254, 0.1)', color: '#4facfe' };
+      case 'completed': return { bg: 'rgba(121, 255, 225, 0.1)', color: '#79ffe1' };
       default: return { bg: 'rgba(158, 158, 158, 0.1)', color: '#9e9e9e' };
     }
   };
@@ -165,13 +181,13 @@ function Bookings() {
               py: 1.5,
               px: 3,
               borderRadius: '12px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
               fontWeight: 'bold',
               textTransform: 'none',
-              boxShadow: '0 4px 15px 0 rgba(102, 126, 234, 0.4)',
+              boxShadow: '0 4px 15px 0 rgba(16, 185, 129, 0.4)',
               '&:hover': {
-                background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
-                boxShadow: '0 6px 20px 0 rgba(102, 126, 234, 0.6)',
+                background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                boxShadow: '0 6px 20px 0 rgba(16, 185, 129, 0.6)',
               },
             }}
           >
@@ -198,7 +214,7 @@ function Bookings() {
           </Grid>
         ) : (
           bookings.map((booking, index) => (
-            <Grid item xs={12} md={6} lg={4} key={booking.id}>
+            <Grid item xs={12} md={6} lg={4} key={booking._id}>
               <Grow in timeout={600 + (index % 9) * 100}>
                 <Card
                   sx={{
@@ -234,10 +250,10 @@ function Bookings() {
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 2 }}>
                       <Box>
                         <Typography variant="h6" fontWeight="bold" gutterBottom>
-                          {booking.resource?.name}
+                            {booking.resource_id?.name || 'Resource'}
                         </Typography>
                         <Chip
-                          label={booking.resource?.type?.replace('_', ' ').toUpperCase()}
+                          label={(booking.resource_id?.type || 'other').replace('_', ' ').toUpperCase()}
                           size="small"
                           sx={{
                             background: mode === 'dark' ? 'rgba(79, 172, 254, 0.1)' : 'rgba(79, 172, 254, 0.1)',
@@ -299,11 +315,11 @@ function Bookings() {
                           sx={{
                             borderRadius: '8px',
                             textTransform: 'none',
-                            borderColor: mode === 'dark' ? 'rgba(102, 126, 234, 0.5)' : '#667eea',
-                            color: '#667eea',
+                            borderColor: mode === 'dark' ? 'rgba(16, 185, 129, 0.5)' : '#10b981',
+                            color: '#10b981',
                             '&:hover': {
-                              borderColor: '#667eea',
-                              background: 'rgba(102, 126, 234, 0.1)',
+                              borderColor: '#10b981',
+                              background: 'rgba(16, 185, 129, 0.1)',
                             },
                           }}
                         >
@@ -316,7 +332,7 @@ function Bookings() {
                             size="small"
                             variant="outlined"
                             startIcon={<CheckIcon />}
-                            onClick={() => handleOpenActionDialog('approve', booking.id)}
+                            onClick={() => handleOpenActionDialog('approve', booking._id)}
                             sx={{
                               borderRadius: '8px',
                               textTransform: 'none',
@@ -334,7 +350,7 @@ function Bookings() {
                             size="small"
                             variant="outlined"
                             startIcon={<CloseIcon />}
-                            onClick={() => handleOpenActionDialog('reject', booking.id)}
+                            onClick={() => handleOpenActionDialog('reject', booking._id)}
                             sx={{
                               borderRadius: '8px',
                               textTransform: 'none',
@@ -355,7 +371,7 @@ function Bookings() {
                           size="small"
                           variant="outlined"
                           startIcon={<CancelIcon />}
-                          onClick={() => handleOpenActionDialog('cancel', booking.id)}
+                          onClick={() => handleOpenActionDialog('cancel', booking._id)}
                           sx={{
                             borderRadius: '8px',
                             textTransform: 'none',
@@ -368,6 +384,22 @@ function Bookings() {
                           }}
                         >
                           Cancel
+                        </Button>
+                      )}
+                      {booking.status === 'checked_in' && (
+                        <Button
+                          size="small"
+                          variant="contained"
+                          startIcon={<CheckCircleIcon />}
+                          onClick={() => handleCheckOut(booking._id)}
+                          sx={{
+                            borderRadius: '8px',
+                            textTransform: 'none',
+                            background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                            boxShadow: '0 4px 12px rgba(79, 172, 254, 0.3)',
+                          }}
+                        >
+                          Check-out
                         </Button>
                       )}
                     </Box>
@@ -397,6 +429,7 @@ function Bookings() {
           {actionDialog.type === 'approve' && 'Approve Booking'}
           {actionDialog.type === 'reject' && 'Reject Booking'}
           {actionDialog.type === 'cancel' && 'Cancel Booking'}
+          {actionDialog.type === 'checkout' && 'Check-out Resource'}
         </DialogTitle>
         <DialogContent>
           {actionDialog.type === 'approve' && (
@@ -441,6 +474,11 @@ function Bookings() {
               Are you sure you want to cancel this booking?
             </Typography>
           )}
+          {actionDialog.type === 'checkout' && (
+            <Typography sx={{ mt: 2 }}>
+              Ready to check out and complete this booking?
+            </Typography>
+          )}
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
           <Button onClick={handleCloseActionDialog} sx={{ borderRadius: '8px', textTransform: 'none' }}>Cancel</Button>
@@ -470,7 +508,7 @@ function Bookings() {
       >
         <DialogTitle>
           <Box display="flex" alignItems="center" gap={1}>
-            <QrCodeIcon sx={{ color: '#667eea' }} />
+            <QrCodeIcon sx={{ color: '#10b981' }} />
             <Typography variant="h6" sx={{ fontWeight: 600 }}>
               Booking QR Code
             </Typography>
@@ -498,7 +536,7 @@ function Bookings() {
                 />
               </Box>
               <Typography variant="body2" color="text.secondary" gutterBottom>
-                <strong>Resource:</strong> {qrDialog.booking.resource?.name}
+                <strong>Resource:</strong> {qrDialog.booking.resource_id?.name}
               </Typography>
               <Typography variant="body2" color="text.secondary" gutterBottom>
                 <strong>Date:</strong> {format(new Date(qrDialog.booking.start_time), 'MMM dd, yyyy HH:mm')}
