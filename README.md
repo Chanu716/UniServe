@@ -1,273 +1,165 @@
-# UniServe - Campus Resource Booking System
+# UniServe
 
-## 🎯 Project Overview
+UniServe is a campus resource booking platform for managing classrooms, laboratories, seminar spaces, and other shared facilities without the usual spreadsheet chaos. It gives students and faculty a simple booking flow, gives coordinators approval and resource-management tools, and gives admins a centralized view of what is being used, when, and by whom.
 
-The Campus Resource Booking System is a centralized web-based application designed to automate the booking, approval, and management of campus resources such as classrooms, laboratories, seminar halls, and equipment. This system eliminates manual booking processes, prevents double bookings, and ensures efficient resource utilization through role-based access control and approval workflows.
+## Why this exists
 
-## 📋 Problem Statement
+Campus bookings usually break down in the same few places: people book the same room twice, approvals live in chat threads, resource lists go stale, and nobody has a clear picture of utilization. UniServe fixes that with one system for discovery, booking, approvals, QR-based check-in, and reporting.
 
-Many educational institutions face challenges with manual resource booking processes:
-- **Double bookings** due to lack of centralized tracking
-- **Lack of transparency** in resource availability
-- **Delays in approvals** through informal communication channels
-- **Inefficient resource utilization** and planning
-- **No audit trail** for accountability
+## What UniServe does
 
-## ✨ Key Features
+- Shows live campus resources with search and filtering.
+- Prevents conflicting bookings before they are submitted.
+- Supports role-based workflows for students, faculty, coordinators, admins, and management.
+- Lets coordinators manage resources and approve or reject booking requests.
+- Uses QR check-in for approved bookings.
+- Surfaces dashboards and analytics for utilization and booking activity.
+- Ships with a seeded SRM AP resource catalog so the app is useful immediately.
 
-- **Centralized Resource Management**: Single platform for all campus resources
-- **Conflict-Free Scheduling**: Automatic detection of booking conflicts
-- **Role-Based Access Control**: Different permissions for students, faculty, coordinators, and admins
-- **Approval Workflow**: Multi-level approval system for booking requests
-- **Real-Time Notifications**: Status updates for booking requests
-- **Reports & Analytics**: Resource utilization and usage statistics
-- **Search & Filtering**: Easy discovery of available resources
+## Roles and access
 
-## 👥 User Roles
+- Student: create bookings, view own bookings, cancel own bookings.
+- Faculty: create bookings with faculty-level priority, view own bookings, cancel own bookings.
+- Coordinator: manage resources, review all bookings, approve or reject requests, check in bookings.
+- Admin: full access to users, resources, bookings, and approvals.
+- Management: read-only visibility into dashboards and analytics.
 
-1. **Students**: Request resources for events/projects
-2. **Faculty**: Book resources for classes/labs
-3. **Department Coordinators**: Approve/reject booking requests
-4. **Admin**: Manage users, resources, and system configuration
-5. **Management**: View reports and utilization analytics
-
-## 🏗️ System Architecture
-
-The system follows a **3-tier architecture**:
-- **Presentation Layer**: Web-based user interface (React)
-- **Business Logic Layer**: Core application logic and workflows (Node.js/Express)
-- **Data Layer**: Database management system (PostgreSQL)
-
-## 📂 Project Structure
-
-```
-UniServe/
-├── docs/                          # Documentation
-│   ├── requirements/              # Requirements documents
-│   │   └── SRS.md                # Software Requirements Specification
-│   └── DEVELOPMENT.md            # Development guide
-├── src/                           # Source code
-│   ├── backend/                   # Node.js/Express backend
-│   │   ├── src/
-│   │   │   ├── config/           # Configuration
-│   │   │   ├── controllers/      # Route controllers
-│   │   │   ├── middleware/       # Express middleware
-│   │   │   ├── models/           # Sequelize models
-│   │   │   ├── routes/           # API routes
-│   │   │   └── utils/            # Utilities
-│   │   ├── package.json
-│   │   └── server.js
-│   ├── frontend/                  # React frontend
-│   │   ├── src/
-│   │   │   ├── components/       # React components
-│   │   │   ├── pages/            # Page components
-│   │   │   ├── services/         # API services
-│   │   │   ├── store/            # State management
-│   │   │   └── utils/            # Utilities
-│   │   ├── package.json
-│   │   └── vite.config.js
-│   └── database/                  # Database scripts
-│       ├── schema.sql
-│       └── README.md
-├── tests/                         # Test cases
-└── deployment/                    # Deployment scripts
-```
-
-## 🛠️ Technology Stack
-
-### Backend
-- **Framework**: Node.js with Express.js
-- **Database**: PostgreSQL with Sequelize ORM
-- **Authentication**: JWT (JSON Web Tokens)
-- **Security**: bcryptjs, helmet, cors
-- **Validation**: express-validator
-- **Logging**: Winston, Morgan
+## Tech stack
 
 ### Frontend
-- **Framework**: React 18
-- **Build Tool**: Vite
-- **UI Library**: Material-UI (MUI)
-- **Routing**: React Router v6
-- **State Management**: Zustand
-- **Forms**: Formik + Yup validation
-- **HTTP Client**: Axios
-- **Notifications**: React Toastify
-- **Date Handling**: date-fns
 
-### DevOps
-- **Version Control**: Git
-- **Package Manager**: npm
-- **Development**: Nodemon (backend), Vite HMR (frontend)
+- React 18
+- Vite
+- Material UI
+- React Router
+- Zustand
+- Formik + Yup
+- Axios
+- React Toastify
+- Recharts
+- html5-qrcode
+- DarkVeil background with OGL
 
-## 📊 Project Status
+### Backend
 
-**Current Phase**: Development Complete ✅
+- Node.js
+- Express
+- MongoDB with Mongoose
+- JWT authentication
+- bcryptjs password hashing
+- express-validator
+- Helmet, CORS, Winston, Morgan
 
-- ✅ **Requirement Analysis & SRS**: Complete
-- ✅ **System Design & Architecture**: Complete
-- ✅ **Development**: Complete
-  - Backend API fully implemented
-  - Frontend UI fully implemented
-  - Database schema created
-  - Authentication system working
-  - Booking workflow implemented
-- ⏳ **Testing**: Ready to begin
-- ⏳ **Deployment**: Ready for deployment
-- ⏳ **Documentation**: In progress
+## Project layout
 
-## 🚀 Getting Started
+```text
+UniServe/
+├── docs/                      # Architecture and design documents
+├── src/
+│   ├── backend/               # Express API, models, controllers, routes
+│   ├── frontend/              # React app, pages, components, state
+│   └── database/              # Database notes and schema helpers
+└── tests/                     # Test assets
+```
+
+## Getting started
 
 ### Prerequisites
-- Node.js 16+
-- PostgreSQL 12+
+
+- Node.js 18 or newer
+- MongoDB running locally or remotely
 - Git
-- Modern web browser
 
-### Installation
+### Backend
 
-1. **Database Setup**
-```bash
-# Create database
-createdb crbs_db
-
-# Run schema
-psql -d crbs_db -f src/database/schema.sql
-```
-
-2. **Backend Setup**
 ```bash
 cd src/backend
 npm install
-cp .env.example .env
-# Edit .env with your database credentials
+```
+
+Create a `.env` file in `src/backend` with the required MongoDB and JWT settings, then start the server:
+
+```bash
 npm run dev
 ```
 
-3. **Frontend Setup**
+### Frontend
+
 ```bash
 cd src/frontend
 npm install
-cp .env.example .env
 npm run dev
 ```
 
-4. **Access the Application**
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000/api/v1
+The frontend runs on Vite and the backend serves the API under `/api/v1`.
 
-### Default Admin Credentials
-- Email: `admin@uniserve.edu`
-- Password: `admin123`
+## Useful scripts
 
-## 📝 API Endpoints
+### Backend
+
+- `npm start` - run the API in production mode.
+- `npm run dev` - run the API with nodemon.
+- `npm test` - run backend tests.
+
+### Frontend
+
+- `npm run dev` - start the Vite dev server.
+- `npm run build` - build production assets.
+- `npm run preview` - preview the production build.
+- `npm test` - run frontend tests.
+- `npm run lint` - lint the frontend code.
+
+## API snapshot
 
 ### Authentication
-- `POST /api/v1/auth/register` - Register new user
-- `POST /api/v1/auth/login` - Login user
-- `GET /api/v1/auth/me` - Get current user
-- `PUT /api/v1/auth/profile` - Update profile
-- `PUT /api/v1/auth/change-password` - Change password
+
+- `POST /api/v1/auth/register`
+- `POST /api/v1/auth/login`
+- `GET /api/v1/auth/me`
+- `PUT /api/v1/auth/profile`
+- `PUT /api/v1/auth/change-password`
 
 ### Resources
-- `GET /api/v1/resources` - Get all resources (with filters)
-- `GET /api/v1/resources/:id` - Get resource by ID
-- `POST /api/v1/resources` - Create resource (Admin only)
-- `PUT /api/v1/resources/:id` - Update resource (Admin only)
-- `DELETE /api/v1/resources/:id` - Delete resource (Admin only)
+
+- `GET /api/v1/resources`
+- `GET /api/v1/resources/:id`
+- `POST /api/v1/resources`
+- `PUT /api/v1/resources/:id`
+- `DELETE /api/v1/resources/:id`
 
 ### Bookings
-- `GET /api/v1/bookings` - Get all bookings
-- `GET /api/v1/bookings/:id` - Get booking by ID
-- `POST /api/v1/bookings` - Create booking
-- `GET /api/v1/bookings/available` - Search available resources
-- `PUT /api/v1/bookings/:id/approve` - Approve booking (Coordinator/Admin)
-- `PUT /api/v1/bookings/:id/reject` - Reject booking (Coordinator/Admin)
-- `PUT /api/v1/bookings/:id/cancel` - Cancel booking
 
-## 👥 User Roles & Permissions
+- `GET /api/v1/bookings`
+- `GET /api/v1/bookings/:id`
+- `POST /api/v1/bookings`
+- `GET /api/v1/bookings/available`
+- `PUT /api/v1/bookings/:id/approve`
+- `PUT /api/v1/bookings/:id/reject`
+- `PUT /api/v1/bookings/:id/cancel`
+- `POST /api/v1/bookings/:id/checkin`
+- `POST /api/v1/bookings/:id/checkout`
 
-| Role | Permissions |
-|------|------------|
-| **Student** | Create bookings, View own bookings, Cancel own bookings |
-| **Faculty** | Same as Student + Priority booking |
-| **Coordinator** | Approve/Reject bookings, View department bookings |
-| **Admin** | Full access: Manage users, resources, all bookings |
-| **Management** | Read-only access to reports and analytics |
+## Documentation
 
-## 🔐 Security Features
+- [Architecture docs](docs/)
+- [Database notes](src/database/README.md)
 
-- Password hashing with bcrypt (10 rounds)
-- JWT token authentication
-- Account lockout after 5 failed login attempts (30 min)
-- HTTPS recommended for production
-- SQL injection prevention via ORM
-- XSS protection via helmet
-- CORS configuration
-- Input validation and sanitization
+## Notes
 
-## 📖 Documentation
+- The current implementation uses MongoDB, not PostgreSQL.
+- The frontend includes a dark-only glassmorphic UI with a full-screen animated background.
+- Resources are seeded automatically when the backend starts and the collection is empty.
+- QR Scanner access is intentionally limited to students and faculty in the UI and backend.
 
-Detailed documentation is available in the `/docs` folder:
-- [Software Requirements Specification (SRS)](docs/requirements/SRS.md)
-- [Development Guide](docs/DEVELOPMENT.md)
-- [Database Setup](src/database/README.md)
+## Contributing
 
-## 🧪 Testing
+1. Fork the repository.
+2. Create a feature branch.
+3. Make your changes.
+4. Run the relevant build or test command.
+5. Open a pull request.
 
-```bash
-# Backend tests
-cd src/backend
-npm test
+## License
 
-# Frontend tests
-cd src/frontend
-npm test
-```
+MIT
 
-## 📦 Deployment
-
-### Backend Deployment
-```bash
-cd src/backend
-npm install --production
-NODE_ENV=production npm start
-```
-
-### Frontend Build
-```bash
-cd src/frontend
-npm run build
-# Serve the dist/ folder
-```
-
-## 🔄 Future Enhancements
-
-- [ ] Recurring bookings support
-- [ ] Email/SMS notifications
-- [ ] Resource utilization reports
-- [ ] Calendar view for bookings
-- [ ] Mobile app
-- [ ] QR code for booking confirmation
-- [ ] Integration with institutional LDAP/AD
-- [ ] Real-time availability updates (WebSocket)
-- [ ] Advanced analytics dashboard
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 👨‍💻 Team
-
-- K Chanikya
-- B Hemanth
--  B Vignesh
--  Vivek
-  
