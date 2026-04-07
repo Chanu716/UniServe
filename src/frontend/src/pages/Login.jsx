@@ -62,17 +62,12 @@ function Login() {
   });
 
   const glassStyle = {
-    background: mode === 'dark' 
-      ? 'rgba(255, 255, 255, 0.05)'
-      : 'rgba(255, 255, 255, 0.7)',
-    backdropFilter: 'blur(10px)',
-    borderRadius: '20px',
-    border: mode === 'dark'
-      ? '1px solid rgba(255, 255, 255, 0.1)'
-      : '1px solid rgba(255, 255, 255, 0.3)',
-    boxShadow: mode === 'dark'
-      ? '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
-      : '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+    background: 'linear-gradient(160deg, rgba(7, 12, 20, 0.82) 0%, rgba(12, 20, 32, 0.68) 55%, rgba(8, 14, 24, 0.76) 100%)',
+    backdropFilter: 'blur(18px)',
+    WebkitBackdropFilter: 'blur(18px)',
+    border: '1px solid rgba(130, 181, 255, 0.12)',
+    borderRadius: '28px',
+    boxShadow: '0 24px 60px rgba(0,0,0,0.48)',
   };
 
   return (
@@ -82,9 +77,7 @@ function Login() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: mode === 'dark'
-          ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)'
-          : 'linear-gradient(135deg, #10b981 0%, #059669 50%, #34d399 100%)',
+        background: 'transparent',
         p: 2,
       }}
     >
@@ -97,7 +90,8 @@ function Login() {
                 sx={{
                   width: 80,
                   height: 80,
-                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                  background: 'linear-gradient(135deg, #7ec8ff 0%, #57f0d1 100%)',
+                  boxShadow: '0 10px 30px rgba(87, 240, 209, 0.18)',
                 }}
               >
                 <LoginIcon sx={{ fontSize: 40 }} />
@@ -107,12 +101,12 @@ function Login() {
             {/* Title */}
             <Typography 
               component="h1" 
-              variant="h3" 
+              variant="h4" 
               align="center" 
               fontWeight="bold"
               gutterBottom
               sx={{
-                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                background: 'linear-gradient(135deg, #7ec8ff 0%, #57f0d1 100%)',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -122,13 +116,13 @@ function Login() {
             </Typography>
             <Typography 
               component="h2" 
-              variant="h6" 
+              variant="body1" 
               align="center" 
               color="text.secondary" 
               gutterBottom
-              sx={{ mb: 4 }}
+              sx={{ mb: 4, maxWidth: 320, mx: 'auto' }}
             >
-              Welcome Back! 👋
+              Sign in to manage bookings, resources, and campus operations.
             </Typography>
             
             {error && (
@@ -169,9 +163,9 @@ function Login() {
                 }}
                 sx={{
                   '& .MuiOutlinedInput-root': {
-                    background: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                    background: 'rgba(255, 255, 255, 0.04)',
                     backdropFilter: 'blur(10px)',
-                    borderRadius: '12px',
+                    borderRadius: '14px',
                   },
                 }}
               />
@@ -207,9 +201,9 @@ function Login() {
                 }}
                 sx={{
                   '& .MuiOutlinedInput-root': {
-                    background: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                    background: 'rgba(255, 255, 255, 0.04)',
                     backdropFilter: 'blur(10px)',
-                    borderRadius: '12px',
+                    borderRadius: '14px',
                   },
                 }}
               />
@@ -222,15 +216,16 @@ function Login() {
                   mt: 3, 
                   mb: 2,
                   py: 1.5,
-                  borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  borderRadius: '14px',
+                  background: 'linear-gradient(135deg, #7ec8ff 0%, #57f0d1 100%)',
                   fontSize: '1.1rem',
                   fontWeight: 'bold',
                   textTransform: 'none',
-                  boxShadow: '0 4px 15px 0 rgba(102, 126, 234, 0.4)',
+                  color: '#05131f',
+                  boxShadow: '0 10px 28px rgba(87, 240, 209, 0.24)',
                   '&:hover': {
-                    background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
-                    boxShadow: '0 6px 20px 0 rgba(102, 126, 234, 0.6)',
+                    background: 'linear-gradient(135deg, #57f0d1 0%, #7ec8ff 100%)',
+                    boxShadow: '0 12px 32px rgba(87, 240, 209, 0.3)',
                   },
                 }}
               >
@@ -242,7 +237,7 @@ function Login() {
                   to="/register" 
                   variant="body2"
                   sx={{
-                    color: mode === 'dark' ? '#10b981' : '#059669',
+                    color: '#7ec8ff',
                     fontWeight: 600,
                     textDecoration: 'none',
                     '&:hover': {

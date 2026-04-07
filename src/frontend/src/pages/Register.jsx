@@ -82,17 +82,11 @@ function Register() {
   });
 
   const glassStyle = {
-    background: mode === 'dark' 
-      ? 'rgba(255, 255, 255, 0.05)'
-      : 'rgba(255, 255, 255, 0.7)',
-    backdropFilter: 'blur(10px)',
-    borderRadius: '20px',
-    border: mode === 'dark'
-      ? '1px solid rgba(255, 255, 255, 0.1)'
-      : '1px solid rgba(255, 255, 255, 0.3)',
-    boxShadow: mode === 'dark'
-      ? '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
-      : '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+    background: 'linear-gradient(160deg, rgba(7, 12, 20, 0.82) 0%, rgba(12, 20, 32, 0.68) 55%, rgba(8, 14, 24, 0.76) 100%)',
+    backdropFilter: 'blur(18px)',
+    borderRadius: '28px',
+    border: '1px solid rgba(130, 181, 255, 0.12)',
+    boxShadow: '0 24px 60px rgba(0,0,0,0.48)',
   };
 
   return (
@@ -102,9 +96,7 @@ function Register() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: mode === 'dark'
-          ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)'
-          : 'linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #43e97b 100%)',
+        background: 'transparent',
         p: 2,
       }}
     >
@@ -117,7 +109,8 @@ function Register() {
                 sx={{
                   width: 80,
                   height: 80,
-                  background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                  background: 'linear-gradient(135deg, #7ec8ff 0%, #57f0d1 100%)',
+                  boxShadow: '0 10px 30px rgba(87, 240, 209, 0.18)',
                 }}
               >
                 <RegisterIcon sx={{ fontSize: 40 }} />
@@ -127,12 +120,12 @@ function Register() {
             {/* Title */}
             <Typography 
               component="h1" 
-              variant="h3" 
+              variant="h4" 
               align="center" 
               fontWeight="bold"
               gutterBottom
               sx={{
-                background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                background: 'linear-gradient(135deg, #7ec8ff 0%, #57f0d1 100%)',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -142,13 +135,13 @@ function Register() {
             </Typography>
             <Typography 
               component="h2" 
-              variant="h6" 
+              variant="body1" 
               align="center" 
               color="text.secondary" 
               gutterBottom
-              sx={{ mb: 4 }}
+              sx={{ mb: 4, maxWidth: 360, mx: 'auto' }}
             >
-              Create Your Account 🎓
+              Create a campus account to reserve spaces and manage bookings.
             </Typography>
             
             {error && (
@@ -189,9 +182,9 @@ function Register() {
                     }}
                     sx={{
                       '& .MuiOutlinedInput-root': {
-                        background: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                        background: 'rgba(255, 255, 255, 0.04)',
                         backdropFilter: 'blur(10px)',
-                        borderRadius: '12px',
+                        borderRadius: '14px',
                       },
                     }}
                   />
@@ -218,9 +211,9 @@ function Register() {
                     }}
                     sx={{
                       '& .MuiOutlinedInput-root': {
-                        background: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                        background: 'rgba(255, 255, 255, 0.04)',
                         backdropFilter: 'blur(10px)',
-                        borderRadius: '12px',
+                        borderRadius: '14px',
                       },
                     }}
                   />
@@ -257,9 +250,9 @@ function Register() {
                     }}
                     sx={{
                       '& .MuiOutlinedInput-root': {
-                        background: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                        background: 'rgba(255, 255, 255, 0.04)',
                         backdropFilter: 'blur(10px)',
-                        borderRadius: '12px',
+                        borderRadius: '14px',
                       },
                     }}
                   />
@@ -279,9 +272,9 @@ function Register() {
                     helperText={formik.touched.role && formik.errors.role}
                     sx={{
                       '& .MuiOutlinedInput-root': {
-                        background: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                        background: 'rgba(255, 255, 255, 0.04)',
                         backdropFilter: 'blur(10px)',
-                        borderRadius: '12px',
+                        borderRadius: '14px',
                       },
                     }}
                   >
@@ -313,9 +306,9 @@ function Register() {
                     }}
                     sx={{
                       '& .MuiOutlinedInput-root': {
-                        background: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                        background: 'rgba(255, 255, 255, 0.04)',
                         backdropFilter: 'blur(10px)',
-                        borderRadius: '12px',
+                        borderRadius: '14px',
                       },
                     }}
                   />
@@ -356,15 +349,16 @@ function Register() {
                   mt: 3, 
                   mb: 2,
                   py: 1.5,
-                  borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                    borderRadius: '14px',
+                    background: 'linear-gradient(135deg, #7ec8ff 0%, #57f0d1 100%)',
                   fontSize: '1.1rem',
                   fontWeight: 'bold',
                   textTransform: 'none',
-                  boxShadow: '0 4px 15px 0 rgba(79, 172, 254, 0.4)',
+                    color: '#05131f',
+                    boxShadow: '0 10px 28px rgba(87, 240, 209, 0.24)',
                   '&:hover': {
-                    background: 'linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)',
-                    boxShadow: '0 6px 20px 0 rgba(79, 172, 254, 0.6)',
+                      background: 'linear-gradient(135deg, #57f0d1 0%, #7ec8ff 100%)',
+                      boxShadow: '0 12px 32px rgba(87, 240, 209, 0.3)',
                   },
                 }}
               >
@@ -376,7 +370,7 @@ function Register() {
                   to="/login" 
                   variant="body2"
                   sx={{
-                    color: mode === 'dark' ? '#4facfe' : '#00f2fe',
+                    color: '#7ec8ff',
                     fontWeight: 600,
                     textDecoration: 'none',
                     '&:hover': {

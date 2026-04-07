@@ -93,17 +93,11 @@ function Profile() {
   });
 
   const glassStyle = {
-    background: mode === 'dark' 
-      ? 'rgba(255, 255, 255, 0.05)'
-      : 'rgba(255, 255, 255, 0.7)',
-    backdropFilter: 'blur(10px)',
-    borderRadius: '20px',
-    border: mode === 'dark'
-      ? '1px solid rgba(255, 255, 255, 0.1)'
-      : '1px solid rgba(255, 255, 255, 0.3)',
-    boxShadow: mode === 'dark'
-      ? '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
-      : '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+    background: 'linear-gradient(160deg, rgba(7, 12, 20, 0.82) 0%, rgba(12, 20, 32, 0.68) 55%, rgba(8, 14, 24, 0.76) 100%)',
+    backdropFilter: 'blur(18px)',
+    borderRadius: '28px',
+    border: '1px solid rgba(130, 181, 255, 0.12)',
+    boxShadow: '0 24px 60px rgba(0,0,0,0.48)',
   };
 
   return (
@@ -112,7 +106,7 @@ function Profile() {
       <Fade in timeout={600}>
         <Box sx={{ mb: 4 }}>
           <Typography variant="h3" fontWeight="bold" gutterBottom>
-            My Profile 👤
+            My Profile
           </Typography>
           <Typography variant="body1" color="text.secondary">
             Manage your account settings and preferences
@@ -129,7 +123,8 @@ function Profile() {
                 sx={{
                   width: 100,
                   height: 100,
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #7ec8ff 0%, #57f0d1 100%)',
+                  boxShadow: '0 12px 30px rgba(87, 240, 209, 0.18)',
                   fontSize: '2.5rem',
                   fontWeight: 'bold',
                 }}
@@ -141,13 +136,16 @@ function Profile() {
               <Typography variant="h4" fontWeight="bold" gutterBottom>
                 {user?.name}
               </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2, maxWidth: 620 }}>
+                Keep your profile details current. Your role controls what you can book, approve, and manage.
+              </Typography>
               <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 <Chip
                   icon={<EmailIcon />}
                   label={user?.email}
                   sx={{
-                    background: mode === 'dark' ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.1)',
-                    color: '#667eea',
+                    background: 'rgba(126, 200, 255, 0.12)',
+                    color: '#dff0ff',
                     fontWeight: 600,
                   }}
                 />
@@ -155,8 +153,8 @@ function Profile() {
                   icon={<BadgeIcon />}
                   label={user?.role?.toUpperCase()}
                   sx={{
-                    background: mode === 'dark' ? 'rgba(67, 233, 123, 0.1)' : 'rgba(67, 233, 123, 0.1)',
-                    color: '#43e97b',
+                    background: 'rgba(87, 240, 209, 0.12)',
+                    color: '#c9fff3',
                     fontWeight: 600,
                   }}
                 />
@@ -165,8 +163,8 @@ function Profile() {
                     icon={<BusinessIcon />}
                     label={user.department}
                     sx={{
-                      background: mode === 'dark' ? 'rgba(79, 172, 254, 0.1)' : 'rgba(79, 172, 254, 0.1)',
-                      color: '#4facfe',
+                      background: 'rgba(126, 200, 255, 0.08)',
+                      color: '#9ed4ff',
                       fontWeight: 600,
                     }}
                   />
@@ -183,7 +181,7 @@ function Profile() {
           <Grow in timeout={1000}>
             <Card sx={{ ...glassStyle, p: 4, height: '100%' }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                <EditIcon sx={{ mr: 1, color: 'primary.main' }} />
+                <EditIcon sx={{ mr: 1, color: '#7ec8ff' }} />
                 <Typography variant="h5" fontWeight="bold">
                   Personal Information
                 </Typography>
@@ -205,7 +203,7 @@ function Profile() {
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
-                      background: mode === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)',
+                      background: 'rgba(255, 255, 255, 0.03)',
                       borderRadius: '12px',
                     },
                   }}
@@ -226,7 +224,7 @@ function Profile() {
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
-                      background: mode === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)',
+                      background: 'rgba(255, 255, 255, 0.03)',
                       borderRadius: '12px',
                     },
                   }}
@@ -249,9 +247,9 @@ function Profile() {
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
-                      background: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                      background: 'rgba(255, 255, 255, 0.04)',
                       backdropFilter: 'blur(10px)',
-                      borderRadius: '12px',
+                      borderRadius: '14px',
                     },
                   }}
                 />
@@ -271,9 +269,9 @@ function Profile() {
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
-                      background: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                      background: 'rgba(255, 255, 255, 0.04)',
                       backdropFilter: 'blur(10px)',
-                      borderRadius: '12px',
+                      borderRadius: '14px',
                     },
                   }}
                 />
@@ -293,9 +291,9 @@ function Profile() {
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
-                      background: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                      background: 'rgba(255, 255, 255, 0.04)',
                       backdropFilter: 'blur(10px)',
-                      borderRadius: '12px',
+                      borderRadius: '14px',
                     },
                   }}
                 />
@@ -308,14 +306,15 @@ function Profile() {
                   sx={{
                     mt: 3,
                     py: 1.5,
-                    borderRadius: '12px',
-                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                    borderRadius: '14px',
+                    background: 'linear-gradient(135deg, #7ec8ff 0%, #57f0d1 100%)',
                     fontWeight: 'bold',
                     textTransform: 'none',
-                    boxShadow: '0 4px 15px 0 rgba(102, 126, 234, 0.4)',
+                    color: '#05131f',
+                    boxShadow: '0 10px 28px rgba(87, 240, 209, 0.24)',
                     '&:hover': {
-                      background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
-                      boxShadow: '0 6px 20px 0 rgba(102, 126, 234, 0.6)',
+                      background: 'linear-gradient(135deg, #57f0d1 0%, #7ec8ff 100%)',
+                      boxShadow: '0 12px 32px rgba(87, 240, 209, 0.3)',
                     },
                   }}
                 >
@@ -331,7 +330,7 @@ function Profile() {
           <Grow in timeout={1200}>
             <Card sx={{ ...glassStyle, p: 4, height: '100%' }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                <LockIcon sx={{ mr: 1, color: 'primary.main' }} />
+                <LockIcon sx={{ mr: 1, color: '#7ec8ff' }} />
                 <Typography variant="h5" fontWeight="bold">
                   Change Password
                 </Typography>
@@ -363,9 +362,9 @@ function Profile() {
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
-                      background: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                      background: 'rgba(255, 255, 255, 0.04)',
                       backdropFilter: 'blur(10px)',
-                      borderRadius: '12px',
+                      borderRadius: '14px',
                     },
                   }}
                 />
@@ -395,9 +394,9 @@ function Profile() {
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
-                      background: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                      background: 'rgba(255, 255, 255, 0.04)',
                       backdropFilter: 'blur(10px)',
-                      borderRadius: '12px',
+                      borderRadius: '14px',
                     },
                   }}
                 />
@@ -427,9 +426,9 @@ function Profile() {
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
-                      background: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                      background: 'rgba(255, 255, 255, 0.04)',
                       backdropFilter: 'blur(10px)',
-                      borderRadius: '12px',
+                      borderRadius: '14px',
                     },
                   }}
                 />
@@ -442,14 +441,15 @@ function Profile() {
                   sx={{
                     mt: 3,
                     py: 1.5,
-                    borderRadius: '12px',
-                    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                    borderRadius: '14px',
+                    background: 'linear-gradient(135deg, #7ec8ff 0%, #57f0d1 100%)',
                     fontWeight: 'bold',
                     textTransform: 'none',
-                    boxShadow: '0 4px 15px 0 rgba(245, 87, 108, 0.4)',
+                    color: '#05131f',
+                    boxShadow: '0 10px 28px rgba(87, 240, 209, 0.24)',
                     '&:hover': {
-                      background: 'linear-gradient(135deg, #f5576c 0%, #f093fb 100%)',
-                      boxShadow: '0 6px 20px 0 rgba(245, 87, 108, 0.6)',
+                      background: 'linear-gradient(135deg, #57f0d1 0%, #7ec8ff 100%)',
+                      boxShadow: '0 12px 32px rgba(87, 240, 209, 0.3)',
                     },
                   }}
                 >
